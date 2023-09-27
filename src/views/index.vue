@@ -246,9 +246,7 @@
 
 <script>
 import {
-  getToken,
   login,
-  userInfo,
   githubLogin,
   qqLogin,
   weiboLogin,
@@ -269,6 +267,8 @@ import LangSwitch from "@/views/main-components/lang-switch";
 import RectLoading from "@/views/main-components/rect-loading";
 import CountDownButton from "@/views/my-components/xboot/count-down-button";
 import util from "@/libs/util.js";
+import {userInfo,getToken} from "@/test"
+
 export default {
   components: {
     CountDownButton,
@@ -360,68 +360,34 @@ export default {
         }
       });
     },
-    afterLogin(res) {
-      let accessToken = res.result;
-      let endDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000 - 1);
+    async afterLogin(result) {
+      let accessToken = result.result;
       this.setStore("accessToken", accessToken);
-      getOtherSet().then((res) => {
-        if (res.result) {
-          let domain = res.result.ssoDomain;
-          Cookies.set("accessToken", accessToken, {
-            domain: domain,
-            expires: endDate,
-          });
-          Cookies.set("popFlag", 1, {
-            expires: endDate,
-          });
-        }
-      });
 
-      // 获取用户信息
-      userInfo().then((res) => {
-        var hrefStr = location.href.split("?")[1];
-        var queryStr = "";
-        var queryType = '';
-        if (hrefStr.indexOf("&") != -1) {
-          queryStr = hrefStr.split("&")[1].split("=")[1];
-          queryType = hrefStr.split("&")[2] ? hrefStr.split("&")[2].split("=")[1] : '';
-        }
-        if (res.success) {
-          // 避免超过大小限制
-          delete res.result.permissions;
-          let roles = [];
-          res.result.roles.forEach((e) => {
-            roles.push(e.name);
-          });
-          this.setStore("roles", roles);
-          this.setStore("saveLogin", this.saveLogin);
-          // 当天12点清除缓存
-          Cookies.set("userInfo", JSON.stringify(res.result), {
-            expires: endDate,
-          });
-
-          this.setStore("userInfo", res.result);
-          this.$store.commit("setAvatarPath", res.result.avatar);
-          this.$store.commit("setAdded", false);
-          // 加载菜单
-          util.initRouter(this, queryStr,queryType);
-          if (this.$route.query.from) {
-            this.$router.push({
-              name: "home_index",
-              query: {
-                from:this.$route.query.from
-              }
-          });
-          } else {
-            this.$router.push({
-            name: "home_index",
-
-          });
-          }
-        } else {
-          this.loading = false;
-        }
-      });
+      let endDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000 - 1);
+      // let res = await userInfo();
+      let res = userInfo;
+      if (res.success) {
+        // 避免超过大小限制
+        delete res.result.permissions;
+        let roles = [];
+        res.result.roles.forEach((e) => {
+          roles.push(e.name);
+        });
+        this.setStore("roles", roles);
+        this.setStore("saveLogin", this.saveLogin);
+        // 当天12点清除缓存
+        Cookies.set("userInfo", JSON.stringify(res.result), {
+          expires: endDate,
+        });
+        this.setStore("userInfo", res.result);
+        this.$store.commit("setAvatarPath", res.result.avatar);
+        this.$store.commit("setAdded", false);
+        util.initRouter(this);
+        this.$router.push({
+          name: "home_index",
+        });
+      }
     },
     submitLogin() {
       if (this.tabName == "username") {
@@ -609,49 +575,48 @@ export default {
         desc: "账号：test或test2<br>密码：123456",
       });
     },
-    indexLogin() {
-      var hrefStr = location.href.split("?")[1];
-      var sessionId;
-      if (hrefStr.indexOf("&") != -1) {
-        sessionId = hrefStr.split("&")[0].split("=")[1];
-      } else {
-        sessionId = hrefStr.split("=")[1];
+    async indexLogin() {
+      let localUrl = location.href;
+      let sessionId;
+      if (localUrl.indexOf("sessionId") !== -1) {
+        var queryList = location.href.split("?")[1].split("&");
+        for (var i = 0; i < queryList.length; i++) {
+          if (queryList[i].indexOf("sessionId") !== -1) {
+            sessionId = queryList[i].split("=")[1]
+          }
+        }
       }
       if (sessionId) {
-        getToken({
-          sessionId,
-        }).then((res) => {
-          if (res.success) {
-            var aprilList = localStorage.getItem("aprilList")
+        // let res = await getToken();
+        let res = getToken;
+        if (res.success){
+          var aprilList = localStorage.getItem("aprilList")
               ? JSON.parse(localStorage.getItem("aprilList"))
               : [];
-            var aprilFlag = localStorage.getItem("aprilFlag")
+          var aprilFlag = localStorage.getItem("aprilFlag")
               ? localStorage.getItem("aprilFlag")
               : "";
-            var marketSourceFlag = localStorage.getItem("marketSourceFlag")
-                ? localStorage.getItem("marketSourceFlag")
-                : "";
-            localStorage.clear();
-            localStorage.setItem("marketSourceFlag", marketSourceFlag);
-            localStorage.setItem("aprilList", JSON.stringify(aprilList));
-            localStorage.setItem("aprilFlag", aprilFlag);
-            localStorage.setItem("sessionId", sessionId);
-            this.afterLogin(res);
-          } else {
-            console.log(res);
-            this.$Modal.info({
-              title: "提醒",
-              content: "用户已失效，点击确认跳转到官网首页。",
-              onOk: () => {
-                location.href = "https://www.chinabidding.cn/";
-              },
-            });
-          }
-        });
+          var marketSourceFlag = localStorage.getItem("marketSourceFlag")
+              ? localStorage.getItem("marketSourceFlag")
+              : "";
+          localStorage.clear();
+          localStorage.setItem("marketSourceFlag", marketSourceFlag);
+          localStorage.setItem("aprilList", JSON.stringify(aprilList));
+          localStorage.setItem("aprilFlag", aprilFlag);
+          localStorage.setItem("sessionId", sessionId);
+          this.afterLogin(res);
+        } else {
+          console.log(res);
+          this.$Modal.info({
+            title: "提醒",
+            content: "用户已失效，点击确认跳转到官网首页。",
+            onOk: () => {
+              location.href = "https://www.chinabidding.cn/";
+            },
+          });
+        }
       } else {
-        this.$router.push({
-          name: "login",
-        });
+        location.href = "https://chinabidding.bid5.cn/";
       }
     },
   },

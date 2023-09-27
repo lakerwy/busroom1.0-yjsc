@@ -362,8 +362,6 @@ import {
   changeMobile,
   sendEditMobileSms,
   toBindWechat,
-  userInfo,
-  getAllGroup,
   ztbSearch,
   getCollection,
   getAllProduct,
@@ -380,6 +378,8 @@ import CountDownButton from "@/views/my-components/xboot/count-down-button";
 import {
   validateMobile
 } from "@/libs/validate";
+import {userInfo,getAllGroup} from "@/test"
+
 export default {
   components: {
     visitVolume,
@@ -493,63 +493,63 @@ export default {
       this.value2=index;
     },
     // 获取用户信息
-    getUserInfo() {
-      userInfo().then((res) => {
-        if (res.success) {
-          let endDate = new Date(
-              new Date().getTime() + 24 * 60 * 60 * 1000 - 1
-          );
-          // 避免超过大小限制
-          delete res.result.permissions;
-          Cookies.set("userInfo", JSON.stringify(res.result), {
-            expires: endDate,
-          });
-          this.setStore("userInfo", res.result);
-          let userInfo = res.result;
-          this.memberType = userInfo.memberType;
-          this.couponAmount = userInfo.couponAmount;
-          this.couponExpire = this.format(new Date(userInfo.couponExpire), 'yyyy年MM月dd日');
-          if (userInfo.wxQrcode){
-            this.wxQrcode = userInfo.wxQrcode;
-          }
-          this.subTipFlag = userInfo.subTipFlag;
-          // flag 优惠券类型  1代金券 2消费券 3代写标书券  status 状态 0上线 1失效 2下线
-          if (userInfo.voucherUsers.length){
-            this.yhqList = userInfo.voucherUsers.map(item => {
-              let yhqTitle, yhqImg;
-              if (item.flag == "1"){
-                yhqTitle = "代金券";
-                yhqImg = "img/img_bg_djq.png";
-              } else if (item.flag == "2"){
-                yhqTitle = "消费券";
-                yhqImg = "img/img_bg_yhq.png";
-              } else if(item.flag == "3") {
-                yhqTitle = "代写标书券";
-                yhqImg = "img/img_bg_dxbsq.png";
-              } else {
-                yhqTitle = "折扣券";
-                yhqImg = "img/img_bg_zkq.png";
-              }
-              if (item.status == "1"){
-                yhqImg = item.amount?"img/img_bg_h.png":"img/img_bg_h.png";
-              }
-              return {
-                id: item.id,
-                title: yhqTitle,
-                img: yhqImg,
-                price: item.amount,
-                date: item.endDate,
-                status: item.status,
-                flag: item.flag,
-                discount: item.discount
-              }
-            })
-            this.timer=setInterval(()=>{
-              this.nextBg()
-            },8000)
-          }
+    async getUserInfo() {
+      // let res = await userInfo();
+      let res = userInfo;
+      if (res.success){
+        let endDate = new Date(
+            new Date().getTime() + 24 * 60 * 60 * 1000 - 1
+        );
+        // 避免超过大小限制
+        delete res.result.permissions;
+        Cookies.set("userInfo", JSON.stringify(res.result), {
+          expires: endDate,
+        });
+        this.setStore("userInfo", res.result);
+        let userInfo = res.result;
+        this.memberType = userInfo.memberType;
+        this.couponAmount = userInfo.couponAmount;
+        this.couponExpire = this.format(new Date(userInfo.couponExpire), 'yyyy年MM月dd日');
+        if (userInfo.wxQrcode){
+          this.wxQrcode = userInfo.wxQrcode;
         }
-      });
+        this.subTipFlag = userInfo.subTipFlag;
+        // flag 优惠券类型  1代金券 2消费券 3代写标书券  status 状态 0上线 1失效 2下线
+        if (userInfo.voucherUsers.length){
+          this.yhqList = userInfo.voucherUsers.map(item => {
+            let yhqTitle, yhqImg;
+            if (item.flag == "1"){
+              yhqTitle = "代金券";
+              yhqImg = "img/img_bg_djq.png";
+            } else if (item.flag == "2"){
+              yhqTitle = "消费券";
+              yhqImg = "img/img_bg_yhq.png";
+            } else if(item.flag == "3") {
+              yhqTitle = "代写标书券";
+              yhqImg = "img/img_bg_dxbsq.png";
+            } else {
+              yhqTitle = "折扣券";
+              yhqImg = "img/img_bg_zkq.png";
+            }
+            if (item.status == "1"){
+              yhqImg = item.amount?"img/img_bg_h.png":"img/img_bg_h.png";
+            }
+            return {
+              id: item.id,
+              title: yhqTitle,
+              img: yhqImg,
+              price: item.amount,
+              date: item.endDate,
+              status: item.status,
+              flag: item.flag,
+              discount: item.discount
+            }
+          })
+          this.timer=setInterval(()=>{
+            this.nextBg()
+          },8000)
+        }
+      }
     },
     cancelVideo() {
       // console.log(123);
@@ -926,21 +926,20 @@ export default {
         });
       }
     },
-    getItemInfo() {
+    async getItemInfo() {
       // 获取我的订阅
-      getAllGroup().then((res) => {
-        this.loading = true;
-        if (res.success && res.result.length > 0) {
-          res.result.forEach((item) => {
-            for (let key in item) {
-              item[key] = item[key] === null ? "" : item[key];
-            }
-          });
-          let group = res.result;
-          this.getByItem(group, group.length - 1);
-        }
-      });
-
+      // let res = await getAllGroup();
+      let res = getAllGroup;
+      this.loading = true;
+      if (res.success && res.result.length > 0){
+        res.result.forEach((item) => {
+          for (let key in item) {
+            item[key] = item[key] === null ? "" : item[key];
+          }
+        });
+        let group = res.result;
+        this.getByItem(group, group.length - 1);
+      }
       // 获取我的收藏
       let collectData = {
         name: "",
@@ -957,7 +956,7 @@ export default {
         }
       });
       // 获取频道页面
-      getAllProduct().then((res) => {});
+      // getAllProduct().then((res) => {});
     },
 
   },
