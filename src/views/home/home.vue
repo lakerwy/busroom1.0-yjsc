@@ -358,15 +358,10 @@
 import {
   ipInfo,
   findAllUserData,
-  getUserListData,
   changeMobile,
   sendEditMobileSms,
   toBindWechat,
-  ztbSearch,
-  getCollection,
   getAllProduct,
-  getChannelBycondition,
-  nzjSearch,
 } from "@/api/index";
 import visitVolume from "./components/visitVolume.vue";
 import services from "./components/services";
@@ -378,7 +373,7 @@ import CountDownButton from "@/views/my-components/xboot/count-down-button";
 import {
   validateMobile
 } from "@/libs/validate";
-import {userInfo,getAllGroup} from "@/test"
+import {userInfo,getAllGroup,getUserListData,ztbSearch,nzjSearch,getCollection,getChannelBycondition} from "@/test"
 
 export default {
   components: {
@@ -697,9 +692,7 @@ export default {
       return true;
 
     },
-    init() {
-
-
+    async init() {
       let aprilTipFlag = true;
       let v = JSON.parse(Cookies.get("userInfo"));
       // 转换null为""
@@ -773,8 +766,10 @@ export default {
       }
 
       // 获取现有成员列表
-      getUserListData(this.searchForm).then((res) => {
-        this.allList = res.result.content;
+      // let res1 = await getUserListData(this.searchForm);
+      let res1 = getUserListData;
+      if (res1.success){
+        this.allList = res1.result.content;
         // 引导弹窗逻辑
         if (popFlag == 1 && aprilTipFlag && marketFlag) {
           if (!this.userInfo.wechat) {
@@ -792,7 +787,7 @@ export default {
             // this.wechatSrc = '/xboot/ticket/createQrcode?inviterId=' + this.userInfo.id
             Cookies.set("popFlag", 0);
           } else if (this.managerFlag) {
-            if (res.result.content.length < 2) {
+            if (res1.result.content.length < 2) {
               this.$Modal.confirm({
                 title: "欢迎进入商务室",
                 content: "您可通过账号管理，邀请更多同事加入企业账号，共享会员服务。",
@@ -809,24 +804,25 @@ export default {
           }
         }
         // 弹窗逻辑end
-      });
+      }
       let watingData = {
         ...this.searchForm,
       };
       watingData.status = 1;
       delete watingData.delFlag;
-      getUserListData(watingData).then((res) => {
-        this.watingList = res.result.content.slice(0, 5);
-      });
+      // let res2 = await getUserListData(watingData);
+      let res2 = getUserListData;
+      if (res2.success){
+        this.watingList = res2.result.content.slice(0, 5);
+      }
 
-      getChannelBycondition({
-        status: 0,
-      }).then((res) => {
-        if (res.success) {
-          this.paid_goods = res.result.content.slice(0, 4);
-        }
-      });
-
+      // let result = await getChannelBycondition({
+      //   status: 0,
+      // });
+      let result = getChannelBycondition;
+      if(result.success) {
+        this.paid_goods = result.result.content.slice(0, 4);
+      }
       if (this.$route.query.from) {
         this.$router.push({
           path: '/supplier/platform'
@@ -847,7 +843,7 @@ export default {
       var newDate = year + month + nowDate;
       return Number(newDate);
     },
-    getByItem(group, index) {
+    async getByItem(group, index) {
       let item = group[index];
       if (item.type === 0) {
         let searchData = {
@@ -874,25 +870,24 @@ export default {
               "yyyy/MM/dd"
           );
         }
-        ztbSearch(searchData).then((data) => {
-          if (data.code == 6015){
-            setTimeout(()=>{
-              this.getByItem(group, index);
-            },1000)
-            return;
+        // let data = await ztbSearch(searchData);
+        let data = ztbSearch;
+        if (data.code == 6015){
+          setTimeout(()=>{
+            this.getByItem(group, index);
+          },1000)
+          return;
+        }
+        console.log(data)
+        if (data.status === "OK") {
+          if (data.result.items.length >= 5) {
+            this.subList = data.result.items.slice(0, 5);
+            this.loading = false;
+          } else if (index > 0) {
+            index--;
+            this.getByItem(group, index);
           }
-          console.log(data)
-          if (data.status === "OK") {
-            if (data.result.items.length >= 5) {
-              this.subList = data.result.items.slice(0, 5);
-              this.loading = false;
-            } else if (index > 0) {
-              index--;
-              this.getByItem(group, index);
-            }
-          }
-        });
-
+        }
       } else if (item.type === 1) {
         this.nzjSearchData.area = [];
         item.area.split(",").forEach((b) => {
@@ -907,23 +902,23 @@ export default {
         this.nzjSearchData.category1 = item.primaryIndustry.split(",");
         this.nzjSearchData.category2 = item.secondaryIndustry.split(",");
         this.nzjSearchData.stage = item.stage.split(",");
-        nzjSearch(this.nzjSearchData).then((data) => {
-          if (data.code == 6015){
-            setTimeout(()=>{
-              this.getByItem(group, index);
-            },1000)
-            return;
+        // let data = await nzjSearch(this.nzjSearchData);
+        let data = ztbSearch;
+        if (data.code == 6015){
+          setTimeout(()=>{
+            this.getByItem(group, index);
+          },1000)
+          return;
+        }
+        if (data.status === "OK") {
+          if (data.result.items.length >= 5) {
+            this.subList = data.result.items.slice(0, 5);
+            this.loading = false;
+          } else if (index > 0) {
+            index--;
+            this.getByItem(group, index);
           }
-          if (data.status === "OK") {
-            if (data.result.items.length >= 5) {
-              this.subList = data.result.items.slice(0, 5);
-              this.loading = false;
-            } else if (index > 0) {
-              index--;
-              this.getByItem(group, index);
-            }
-          }
-        });
+        }
       }
     },
     async getItemInfo() {
@@ -950,11 +945,11 @@ export default {
         sort: "createTime",
         order: "desc",
       };
-      getCollection(collectData).then((res) => {
-        if (res.success) {
-          this.colList = res.result.content.slice(0, 5);
-        }
-      });
+      // let result = await getCollection(collectData);
+      let result = getCollection;
+      if (result.success) {
+        this.colList = result.result.content.slice(0, 5);
+      }
       // 获取频道页面
       // getAllProduct().then((res) => {});
     },

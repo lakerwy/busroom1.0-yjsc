@@ -233,12 +233,12 @@ import Cookies from "js-cookie";
 import util from "@/libs/util.js";
 import {
   ws,
-  getMessageSendData,
   getOtherSet,
   ticketLogout, // 退出登录
 } from "@/api/index";
 import SockJS from "sockjs-client";
 import stompOld from "@/libs/stomp.js";
+import {getMessageSendData} from "@/test"
 
 import axios from "axios";
 var Stomp = stompOld.Stomp;
@@ -316,7 +316,7 @@ export default {
     timeout(orgCmd) {},
   },
   methods: {
-    init() {
+    async init() {
       this.$store.commit("getNickName");
       // 菜单
       let pathArr = util.setCurrentPath(this, this.$route.name);
@@ -334,14 +334,15 @@ export default {
         this.sliceNum = 2;
       }
       // 读取未读消息数
-      getMessageSendData({
-        userId: userInfo.id,
-        status: 0,
-      }).then((res) => {
-        if (res.success) {
-          this.$store.commit("setMessageCount", res.result.totalElements);
-        }
-      });
+      // let res = await getMessageSendData({
+      //   userId: userInfo.id,
+      //   status: 0,
+      // })
+      let res = getMessageSendData;
+      if (res.success) {
+        this.$store.commit("setMessageCount", res.result.totalElements);
+      }
+
       // 消息开关 websocket
       let messageOpen = this.getStore("messageOpen");
       console.log("messageOpen", messageOpen);

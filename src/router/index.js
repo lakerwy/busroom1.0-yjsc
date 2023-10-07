@@ -58,7 +58,7 @@ router.beforeEach((to, from, next) => {
                     location.href = "https://www.chinabidding.cn/public/2020/html/login.html?query=email&type=0";
                 }
             } else {
-                location.href = "https://www.chinabidding.cn/";
+                // location.href = "https://www.chinabidding.cn/";
             }
         } else
             if (!Cookies.get('userInfo') && whiteList) {

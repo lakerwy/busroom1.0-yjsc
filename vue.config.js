@@ -3,6 +3,7 @@ const CopyWebpackPlugin = require("copy-webpack-plugin")
 
 module.exports = {
   // publicPath:"https://public.esep.cn",
+  publicPath: "./",
   devServer: {
     host: "0.0.0.0",
     port: 8080,
@@ -13,8 +14,11 @@ module.exports = {
         target: 'https://hive.esep.cn', // 生产环境
         ws: true,
       },
-      "/foo": {
-        target: "<other_url>",
+      '/': {
+        target: 'https://cp1059.sygnew.com',
+        pathRewrite: {
+          "^/": "/"
+        }
       },
     },
   },
