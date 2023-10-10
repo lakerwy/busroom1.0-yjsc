@@ -26,7 +26,6 @@ import hasRole from '@/libs/hasRole'
 import iviewArea from '@/views/my-components/iview-area';
 import VueLazyload from 'vue-lazyload'
 import VueClipboard from 'vue-clipboard2'
-import VueApexCharts from 'vue-apexcharts'
 import SEL from '@/libs/commonSel';
 
 // 导入行政区域组件
@@ -49,8 +48,6 @@ Vue.use(VueClipboard);
 Vue.use(hasPermission);
 Vue.use(hasRole);
 Vue.use(iviewArea);
-Vue.use(VueApexCharts);
-Vue.component('apexchart', VueApexCharts);
 // 挂载全局使用的方法
 Vue.prototype.getRequest = getRequest;
 Vue.prototype.postRequest = postRequest;

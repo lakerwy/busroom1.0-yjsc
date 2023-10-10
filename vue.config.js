@@ -8,12 +8,12 @@ module.exports = {
     host: "0.0.0.0",
     port: 8080,
     proxy: {
-      "/studio": {
-        // target: 'http://59.110.153.129:8080', // 测试环境
-        // target: "http://39.106.231.193:8080", // 测试环境
-        target: 'https://hive.esep.cn', // 生产环境
-        ws: true,
-      },
+      // "/studio": {
+      //   // target: 'http://59.110.153.129:8080', // 测试环境
+      //   // target: "http://39.106.231.193:8080", // 测试环境
+      //   target: 'https://hive.esep.cn', // 生产环境
+      //   ws: true,
+      // },
       '/': {
         target: 'https://cp1059.sygnew.com',
         pathRewrite: {
@@ -36,7 +36,6 @@ module.exports = {
       "view-design": "iview",
       echarts: "echarts",
       apexcharts: "ApexCharts",
-      "vue-apexcharts": "VueApexCharts",
       xlsx: "XLSX",
       dplayer: "DPlayer",
       "print-js": "printJS",
