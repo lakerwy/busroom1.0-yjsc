@@ -26,6 +26,7 @@ import hasRole from '@/libs/hasRole'
 import iviewArea from '@/views/my-components/iview-area';
 import VueLazyload from 'vue-lazyload'
 import VueClipboard from 'vue-clipboard2'
+import VueApexCharts from 'vue-apexcharts'
 import SEL from '@/libs/commonSel';
 
 // 导入行政区域组件
@@ -48,6 +49,8 @@ Vue.use(VueClipboard);
 Vue.use(hasPermission);
 Vue.use(hasRole);
 Vue.use(iviewArea);
+Vue.use(VueApexCharts);
+Vue.component('apexchart', VueApexCharts);
 // 挂载全局使用的方法
 Vue.prototype.getRequest = getRequest;
 Vue.prototype.postRequest = postRequest;
@@ -100,7 +103,7 @@ new Vue({
         }
         util.initRouter(this);
         // 初始化全局数据字典
-        dictUtil.initDictData(this);
+        // dictUtil.initDictData(this);
         this.currentPageName = this.$route.name;
         // 显示打开的页面的列表
         this.$store.commit('setOpenedList');

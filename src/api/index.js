@@ -484,17 +484,17 @@ export const removeProjectUser = (params) => {
 }
 
 // Vaptcha ID
-export const vaptchaID = baseURL + "5dce36188713b71e70a41eb7"
+// export const vaptchaID = baseURL + "5dce36188713b71e70a41eb7"
 // 文件上传接口
-export const uploadFile = baseURL + "/studio/upload/file"
+export const uploadFile = baseURL + "/upload/file"
 // 验证码渲染图片接口
-export const drawCodeImage = baseURL + "/studio/common/captcha/draw/"
+export const drawCodeImage = baseURL + "/common/captcha/draw/"
 // 获取菜单
-export const getMenuList = baseURL + "/studio/permission/getMenuList"
+export const getMenuList = baseURL + "/permission/getMenuList"
 // 获取数据字典
-export const getDictData = baseURL + "/studio/dictData/getByType/"
+export const getDictData = baseURL + "/dictData/getByType/"
 // Websocket
-export const ws = baseURL + "/studio/ws"
+export const ws = baseURL + "/ws"
 
 // 登陆
 export const login = (params) => {
@@ -1133,7 +1133,7 @@ export const getMessage = (phone) => {
 }
 
 // 供应商工作台-补发中标-上传文件地址
-export const uploadUrl_reissue = baseURL + "/studio/agentInfo/upFile"
+export const uploadUrl_reissue = baseURL + "/agentInfo/upFile"
 
 // 供应商工作台-信息管理-删除文件
 export const delete_File = (params) => {

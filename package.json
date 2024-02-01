@@ -20,7 +20,6 @@
     "core-js": "^3.6.5",
     "countup.js": "^2.0.4",
     "date-fns": "^2.12.0",
-    "dplayer": "^1.25.1",
     "echarts": "^4.7.0",
     "gitalk": "^1.6.2",
     "html2canvas": "^1.0.0-rc.5",

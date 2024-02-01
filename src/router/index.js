@@ -45,7 +45,7 @@ router.beforeEach((to, from, next) => {
         next(false);
     } else {
         // 白名单
-        var whiteList = name != 'login' && name != 'regist' && name != 'regist-result' && name != 'index' && name != 'relate' && name != 'reset' && name != 'authorize' && name != 'second-info';
+        var whiteList =name != 'navpage' && name != 'login' && name != 'regist' && name != 'regist-result' && name != 'index' && name != 'relate' && name != 'reset' && name != 'authorize' && name != 'second-info';
         if (name == 'login') {
             if (to.query.query == 'email') {
                 if (to.query.type == 1) {
@@ -58,10 +58,10 @@ router.beforeEach((to, from, next) => {
                     location.href = "https://www.chinabidding.cn/public/2020/html/login.html?query=email&type=0";
                 }
             } else {
-                // location.href = "https://www.chinabidding.cn/";
+                location.href = "https://www.chinabidding.cn/";
             }
         } else
-            if (!Cookies.get('userInfo') && whiteList) {
+            if (!window.localStorage.getItem('userInfo') && whiteList) {
                 // 判断是否已经登录且前往的页面不是登录页
                 if (to.query.query == 'email') {
                     if (to.query.type == 1) {
@@ -104,7 +104,7 @@ router.beforeEach((to, from, next) => {
                         name: 'login',
                     });
                 }
-            } else if (Cookies.get('userInfo') && name == 'login') {
+            } else if (window.localStorage.getItem('userInfo') && name == 'login') {
                 // 判断是否已经登录且前往的是登录页
                 Util.title();
                 next({

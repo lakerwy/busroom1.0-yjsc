@@ -28,10 +28,10 @@
         <Button type="primary" :loading="checkCodeLoading" @click="submitEditMobile">提交</Button>
       </div>
     </Modal>
-    <Modal title="欢迎进入商务室" class="wechat" v-model="wechatFlag" class-name="wechat" :mask-closable="false" style="text-align: center;"
+    <Modal title="欢迎进入商务室" v-model="wechatFlag" class-name="wechat" :mask-closable="false" style="text-align: center"
            @on-cancel="closeWechat">
       <p>这里是专属于您自己的商务空间，更多移动端服务关注公众号。</p>
-      <img :src="wechatSrc" style="height: calc(100% - 32px); display: block; margin: 0 auto" alt="扫描绑定微信" />
+      <img :src="wechatSrc" style="display: block; margin: 0 auto" alt="扫描绑定微信" />
       <div slot="footer">
         <Button type="primary" @click="closeWechat">关闭</Button>
       </div>
@@ -80,7 +80,7 @@
               </div>
               <div class="intro">
                 <p style="margin-top: 8px">
-                  <span class="subtitle">全业务客户顾问：</span>{{ userInfo.contact }}
+                  <span class="subtitle">专属客服：</span>{{ userInfo.contact }}
                 </p>
                 <Poptip trigger="hover" :content="userInfo.contactPhone" placement="bottom" :disabled="contactPhonePop">
                   <p class="second">
@@ -157,22 +157,12 @@
           </Card>
         </Col>
         <Col span="8">
-          <Card :bordered="false" class="kuaijie">
+          <Card :bordered="false">
             <div class="_clear" slot="title">
-              <span class="title">快捷操作</span>
-            </div>
-            <div class="card_body member">
-              <div class="manager">
-                <a v-for="(item, i) in linkList" @click="linkTo(item)"
-                   :key="i">{{ item.title }}</a>
-              </div>
-            </div>
-          </Card>
-          <Card :bordered="false" class="kuaijie chengyuan">
-            <div class="_clear" slot="title">
+              <!-- <Icon type="ios-people" style="margin-right:5px;" /> -->
               <span class="title">现有成员（{{ allList.length }}）</span>
-<!--              <Button class="_right" v-if="managerFlag" @click="enterTo('count', { flag: 1 })" size="small"-->
-<!--                      icon="ios-send">立即前往</Button>-->
+              <Button class="_right" v-if="managerFlag" @click="enterTo('count', { flag: 1 })" size="small"
+                      icon="ios-send">立即前往</Button>
             </div>
             <div class="card_body member">
               <div class="manager" v-if="managerFlag">
@@ -180,9 +170,9 @@
                    :key="i">{{ item.nickname ? item.nickname : "[ ]" }}</a>
               </div>
               <div class="normal" v-else>
-                <span v-for="(item, i) in allList" :key="i">{{
-                    item.nickname ? item.nickname : "[ ]"
-                  }}</span>
+              <span v-for="(item, i) in allList" :key="i">{{
+                  item.nickname ? item.nickname : "[ ]"
+                }}</span>
               </div>
             </div>
           </Card>
@@ -484,13 +474,6 @@ export default {
       projectIdField: ["探项网单省", "元博关系圈", "元博征信", "标书代写"],
       discountField: ["95", "9", "85", "8", "75", "55"],
       timer: null,
-      linkList: [
-        {id:1, title: "个人中心", name: 'ownspace_index', query: ''},
-        {id:2, title: "邮箱绑定", name: 'ownspace_index', query: 'email'},
-        {id:3, title: "微信绑定", name: 'ownspace_index', query: 'social'},
-        {id:4, title: "修改密码", name: 'change_pass', query: 'edit'},
-        {id:5, title: "子账号管理", name: 'count', query: ''},
-      ]
     };
   },
   methods: {
@@ -638,18 +621,11 @@ export default {
       }
     },
     enterTo(a, data) {
-      this.$router.push({
-        name: a,
-        params: data,
-      });
-    },
-    linkTo(item){
-      this.$router.push({
-        name: item.name,
-        params: {
-          type: item.query
-        },
-      });
+      // this.$router.push({
+      //   name: a,
+      //   params: data,
+      // }, );
+      this.openNewWindow(a)
     },
     updateUserInfo() {
       // 更新用户信息
@@ -751,14 +727,10 @@ export default {
       ) {
         this.contactPhonePop = false;
       }
-
-      let popFlag = localStorage.getItem("popFlag");
+      let popFlag = Cookies.get("popFlag");
       this.userInfo.expireTime = this.userInfo.expireTime.slice(0, 10);
       this.managerFlag = this.userInfo.type === 1 ? true : false;
       this.searchForm.companyId = this.userInfo.companyId;
-      if (this.userInfo.type != 1){
-        this.linkList.pop();
-      }
 
       //判断是否显示专属客服弹窗
       /*let marketSourceVo = JSON.parse(this.getStore("userInfo")).marketSourceVo;
@@ -823,7 +795,7 @@ export default {
               }
             });
             // this.wechatSrc = '/xboot/ticket/createQrcode?inviterId=' + this.userInfo.id
-            localStorage.setItem("popFlag", 0)
+            Cookies.set("popFlag", 0);
           } else if (this.managerFlag) {
             if (res.result.content.length < 2) {
               this.$Modal.confirm({
@@ -831,13 +803,11 @@ export default {
                 content: "您可通过账号管理，邀请更多同事加入企业账号，共享会员服务。",
                 okText: "立即邀请",
                 onOk: () => {
-                  this.$router.push({
-                    path: "/companyManage/count",
-                  });
+                  this.openNewWindow('count')
                 },
               });
               // 未邀请用户
-              localStorage.setItem("popFlag", 0)
+              Cookies.set("popFlag", 0);
             }
           }
         }
@@ -861,9 +831,10 @@ export default {
       });
 
       if (this.$route.query.from) {
-        this.$router.push({
-          path: '/supplier/platform'
-        })
+        this.openNewWindow('platform')
+        // this.$router.push({
+        //   path: '/supplier/platform'
+        // })
       }
     },
     getCooldate(){
@@ -922,8 +893,6 @@ export default {
             } else if (index > 0) {
               index--;
               this.getByItem(group, index);
-            } else {
-              this.loading = false;
             }
           }
         });
@@ -973,8 +942,6 @@ export default {
           });
           let group = res.result;
           this.getByItem(group, group.length - 1);
-        } else {
-          this.loading = false;
         }
       });
 
@@ -996,19 +963,19 @@ export default {
       // 获取频道页面
       getAllProduct().then((res) => {});
     },
-
+    //新打开一个窗口页面
+    openNewWindow(name){
+      let sessionId = window.localStorage.getItem('sessionId')
+      const resolve = this.$router.resolve({
+        name: 'index',
+      })
+      window.open(resolve.href + '?sessionId='+sessionId+'&name='+name, '_blank')
+    }
   },
   mounted() {
     this.init();
     this.getItemInfo();
     this.getUserInfo();
-
-    /* this.$router.push({
-            name: "subscribe",
-          }); */
-    window.addEventListener("resize", function () {
-      console.log(111)
-    });
   },
   destroyed() {
     clearInterval(this.timeId);
@@ -1087,7 +1054,7 @@ export default {
     }
   }
   .yhqBg {
-    //max-width: 504.3px;
+    max-width: 504.3px;
     margin-bottom: 15px;
     height: 89px;
     display: flex;
@@ -1228,36 +1195,6 @@ export default {
 .imgs-leave-active {
   opacity: 0;
 }
-
-.wechat {
-  /deep/ .ivu-modal-body {
-    height: 49vh;
-  }
-}
-.kuaijie:hover{
-  box-shadow: none;
-}
-.kuaijie {
-  border-radius: 4px 4px 0 0px;
-  /deep/ .ivu-card-body {
-    padding-bottom: 8px;
-    padding-top: 8px;
-  }
-  .member {
-    height: 56px;
-  }
-  .member > div a, .member > div span {
-    height: 27px;
-    cursor: pointer;
-  }
-}
-.chengyuan {
-  border-radius: 0px 0px 4px 4px;
-  /deep/ .ivu-card-head {
-    padding-top: 0;
-  }
-}
-
 
 </style>
 

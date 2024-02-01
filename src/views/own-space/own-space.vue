@@ -20,7 +20,7 @@
             <MenuItem name="基本信息">基本信息</MenuItem>
             <MenuItem name="安全设置">安全设置</MenuItem>
             <MenuItem name="第三方账号绑定">第三方账号绑定</MenuItem>
-            <MenuItem name="企业采钻" v-if="managerFlag" to="http://www.youyijifen.com/" target="_blank">企业采钻</MenuItem>
+            <MenuItem name="企业采钻" v-if="managerFlag" to="https://jfsc.chinabidding.cn/front/index.html#/home" target="_blank">企业采钻</MenuItem>
             <!-- <MenuItem name="我的订单" :to="{name:'special',params:{flag:3}}">我的订单</MenuItem> -->
           </Menu>
         </div>
@@ -560,7 +560,7 @@
             Cookies.set("userInfo", JSON.stringify(res.result), {
               expires: endDate
             });
-            this.setStore("userInfo", res.result);
+            this.setStore("userInfo", JSON.stringify(res.result));
             let userInfo = res.result;
             userInfo.addressArray = [];
             for (let attr in userInfo) {
@@ -592,7 +592,7 @@
         });
         // let userInfo = JSON.parse(str);
 
-        let v = JSON.parse(Cookies.get("userInfo"));
+        let v = JSON.parse(window.localStorage.getItem('userInfo'));
         // 转换null为""
         for (let attr in v) {
           if (v[attr] == null) {
@@ -942,7 +942,7 @@
             Cookies.set("userInfo", JSON.stringify(res.result), {
               expires: endDate
             });
-            this.setStore("userInfo", res.result);
+            this.setStore("userInfo", JSON.stringify(res.result));
           }
         });
       },
@@ -955,6 +955,17 @@
       if (type == "social") {
         this.activeName = "第三方账号绑定";
         this.currMenu = "第三方账号绑定";
+      }
+      let paramsType = this.$route.params.type;
+      if (paramsType == "social") {
+        this.activeName = "第三方账号绑定";
+        this.currMenu = "第三方账号绑定";
+      } else if(paramsType == "email"){
+        this.activeName = "安全设置";
+        this.currMenu = "安全设置";
+      } else {
+        this.activeName = "基本信息";
+        this.currMenu = "基本信息";
       }
       this.init();
     },

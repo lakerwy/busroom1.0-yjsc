@@ -1,8 +1,8 @@
 import axios from 'axios';
+import { getMenuList } from '@/api/index';
 import lazyLoading from './lazyLoading.js';
 import router from '@/router/index';
 import Cookies from "js-cookie";
-import {getMenulist} from '@/test'
 
 let util = {
 
@@ -306,7 +306,7 @@ export const getTableDataFromArray = (array) => {
     }
 }
 
-util.initRouter = async function (vm, s, t) {
+util.initRouter = function (vm, s, t) {
     const constRoutes = [];
     const otherRoutes = [];
 
@@ -320,45 +320,55 @@ util.initRouter = async function (vm, s, t) {
         component: 'error-page/404'
     }];
     // 判断用户是否登录
-    let userInfo = Cookies.get('userInfo')
+    let userInfo = window.localStorage.getItem('userInfo')
     if (!userInfo) {
         // 未登录
         return;
     }
     if (!vm.$store.state.app.added) {
-        // let res = await getMenuList();
-        let res = getMenulist;
-        let menuData = res.result;
-        if (!menuData) {
-            return;
-        }
-        util.initAllMenuData(constRoutes, menuData);
-        util.initRouterNode(otherRoutes, otherRouter);
-        // 添加所有主界面路由
-        vm.$store.commit('updateAppRouter', constRoutes.filter(item => item.children.length > 0));
-        // 添加全局路由
-        vm.$store.commit('updateDefaultRouter', otherRoutes);
-        // 添加菜单路由
-        util.initMenuData(vm, menuData);
-        // 缓存数据 修改加载标识
-        window.localStorage.setItem('menuData', JSON.stringify(menuData));
-        vm.$store.commit('setAdded', true);
-        if (s == 'email') {
-            if (t == 1) {
-                vm.$router.push({
-                    name: 'subscribe-manage'
-                })
-            } else if (t == 2) {
-                vm.$router.push({
-                    name: 'subscribe-overview'
-                })
+        // 第一次加载 读取数据
+        let accessToken = window.localStorage.getItem('accessToken');
+        // 加载菜单
+        axios.get(getMenuList, { headers: { 'accessToken': accessToken } }).then(res => {
+            let menuData = res.result;
+            if (!menuData) {
+                return;
             }
-            else if (t == 0) {
-                vm.$router.push({
-                    name: 'subscribe-email'
-                })
+            util.initAllMenuData(constRoutes, menuData);
+            util.initRouterNode(otherRoutes, otherRouter);
+            // 添加所有主界面路由
+            vm.$store.commit('updateAppRouter', constRoutes.filter(item => item.children.length > 0));
+            // 添加全局路由
+            vm.$store.commit('updateDefaultRouter', otherRoutes);
+            // 添加菜单路由
+            util.initMenuData(vm, menuData);
+            // 缓存数据 修改加载标识
+            window.localStorage.setItem('menuData', JSON.stringify(menuData));
+            vm.$store.commit('setAdded', true);
+
+            if(s){
+                if (s == 'email') {
+                    if (t == 1) {
+                        vm.$router.push({
+                            name: 'subscribe-manage'
+                        })
+                    } else if (t == 2) {
+                        vm.$router.push({
+                            name: 'subscribe-overview'
+                        })
+                    }
+                    else if (t == 0) {
+                        vm.$router.push({
+                            name: 'subscribe-email'
+                        })
+                    }
+                } else {
+                    vm.$router.push({
+                        name: s
+                    })
+                }
             }
-        }
+        });
     } else {
         // 读取缓存数据
         let data = window.localStorage.getItem('menuData');

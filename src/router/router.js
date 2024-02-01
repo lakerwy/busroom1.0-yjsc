@@ -1,6 +1,15 @@
 import Main from '@/views/Main.vue';
 
 // 不作为Main组件的子页面展示的页面单独写，如下
+// export const navpageRouter = {
+//     path: '/navpage',
+//     name: 'navpage',
+//     meta: {
+//         title: '登录 - 我的商务室 '
+//     },
+//     component: () => import('@/views/navPage.vue')
+//     // component: () => import('@/views/home/homepage.vue')
+// };
 
 export const indexRouter = {
     path: '/index',
@@ -10,25 +19,6 @@ export const indexRouter = {
     },
     component: () => import('@/views/index.vue')
 };
-
-
-// export const secondInfo = {
-//     path: '/second-info/:infoId',
-//     name: 'second-info',
-//     meta: {
-//         title: 'cms - 二手临时信息'
-//     },
-//     component: () => import('@/views/SecondInfo.vue')
-// }; 
-
-// export const page404 = {
-//     path: '/*',
-//     name: 'error-404',
-//     meta: {
-//         title: '404-页面不存在'
-//     },
-//     component: () => import('@/views/error-page/404.vue')
-// };
 
 export const page403 = {
     path: '/403',
@@ -68,10 +58,6 @@ export const otherRouter = {
         { path: 'project-create', title: '项目详情', name: 'projectCreate', component: () => import('@/views/projectManage/create.vue') },
         { path: 'change-pass', title: '密码管理', name: 'change_pass', component: () => import('@/views/change-pass/change-pass.vue') },
         { path: 'message', title: '消息中心', name: 'message_index', component: () => import('@/views/my-message/message.vue') },
-        // { path: 'add', title: '添加', name: 'add', component: () => import('@/views/xboot-vue-template/new-window/add.vue') },
-        // { path: 'edit', title: '编辑', name: 'edit', component: () => import('@/views/xboot-vue-template/new-window/edit.vue') },
-        // { path: 'leave', title: '请假申请', name: 'leave', component: () => import('@/views/activiti/business/leave.vue') },
-
 
         { path: '/infoPublish/stateList', title: '所有公告', name: 'stateList', component: () => import('@/views/infoPublish/infoHome/stateList.vue') },
         { path: '/project/addProject', title: '新建项目', name: 'addProject', component: () => import('@/views/infoPublish/project/addProject.vue') },
@@ -124,6 +110,7 @@ export const appRouter = [];
 // 所有上面定义的路由都要写在下面的routers里
 export const routers = [
     // secondInfo,
+    // navpageRouter,
     indexRouter,
     otherRouter,
     locking,

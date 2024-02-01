@@ -28,16 +28,14 @@
     >
       <div class="main-header-nav main-header">
         <div class="mySws">我的商务室</div>
-        <div class="topNav">
-          <navMenu class="navMenu" :menu-list="menuList"></navMenu>
-        </div>
+        <navMenu class="navMenu" :menu-list="menuList"></navMenu>
         <div :class="{'header-avator-con': navType != 4,'header-avator-con nav4': navType == 4,}">
-          <!--          <full-screen-->
-          <!--              class="tool_icon"-->
-          <!--              v-model="isFullScreen"-->
-          <!--              @on-change="fullscreenChange"-->
-          <!--          ></full-screen>-->
-          <message-tip class="tool_icon" v-model="mesCount"></message-tip>
+<!--          <full-screen-->
+<!--              class="tool_icon"-->
+<!--              v-model="isFullScreen"-->
+<!--              @on-change="fullscreenChange"-->
+<!--          ></full-screen>-->
+          <message-tip class="tool_icon" v-model="mesCount" :isOpenNewPage="true"></message-tip>
           <div class="user-dropdown-menu-con">
             <Row
                 type="flex"
@@ -67,7 +65,7 @@
                   <DropdownItem name="changePass">{{
                       $t("changePass")
                     }}</DropdownItem>
-                  <DropdownItem name="loginout" divided v-show="showLogout">{{
+                  <DropdownItem name="loginout" divided>{{
                       $t("logout")
                     }}</DropdownItem>
                 </DropdownMenu>
@@ -142,7 +140,6 @@ export default {
       firstThreeNav: [],
       lastNav: [],
       navType: 1,
-      showLogout: true,
     };
   },
   computed: {
@@ -267,25 +264,11 @@ export default {
     handleClickUserDropdown(name) {
       if (name == "ownSpace") {
         util.openNewPage(this, "ownspace_index");
-        this.$router.push({
-          name: "ownspace_index",
-        });
+        this.openNewWindow('ownspace_index')
       } else if (name == "changePass") {
         util.openNewPage(this, "change_pass");
-        this.$router.push({
-          name: "change_pass",
-        });
+        this.openNewWindow('change_pass')
       } else if (name == "loginout") {
-        if (window.frames.length != window.parent.frames.length) {
-          console.log('在iframe中111');
-          window.top.postMessage({close:true},'*')
-          return window.parent.top.postMessage({close:true},'*')
-        }
-        try {
-          window.top.postMessage({close:true},'*')
-        } catch(error) {
-          console.log(error)
-        }
         // 退出登录
         let sessionId = localStorage.getItem("sessionId");
         this.$store.commit("setLoading", true);
@@ -357,10 +340,6 @@ export default {
   },
   mounted() {
     this.init();
-    if (window.frames.length != window.parent.frames.length) {
-      console.log('在iframe中111');
-      // this.showLogout = false;
-    }
   },
   created() {
     // 显示打开的页面的列表
@@ -371,9 +350,6 @@ export default {
 <style lang="less" scoped>
 .main-header-con {
   padding-left: 0;
-}
-.single-page-con {
-  left: 0;
 }
 .main-header-nav {
   min-width: 740px;
@@ -392,31 +368,15 @@ export default {
     height: 60px;
     text-align: center;
     line-height: 60px;
-    font-size: 20px;
+    font-size: 16px;
     color: #fff;
-    font-weight: bold;
   }
-  .topNav {
-    width: calc(100% - 350px);
-    .navMenu {
-      background: #2B64CE;
-      height: auto;
-      display: inline-block;
-      vertical-align: middle;
-      position: relative;
-      z-index: 0;
-    }
-  }
-  /deep/.ivu-menu-horizontal>.ivu-menu-item, /deep/.ivu-menu-horizontal .ivu-menu-submenu {
-    position: initial;
-    padding:0 15px;
-  }
-  /deep/.ivu-menu-submenu-title>i {
-    margin-right: 0;
+  .navMenu {
+    background: #2B64CE;
+    //display: inline-block;
   }
   .header-avator-con {
     width: 170px;
-    z-index: 999;
   }
   .message-con {
     /deep/ .ivu-icon-md-notifications {
