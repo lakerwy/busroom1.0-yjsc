@@ -9,8 +9,8 @@ module.exports = {
     proxy: {
       "/studio": {
         // target: "http://39.106.231.193:8080", // 测试环境
-        target: 'https://dev.esep.cn', // 测试环境
-        // target: 'https://hive.esep.cn', // 生产环境
+        // target: 'https://dev.esep.cn', // 测试环境
+        target: 'https://hive.esep.cn', // 生产环境
         ws: true,
       },
     },

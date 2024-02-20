@@ -7,8 +7,8 @@ import Main from '@/views/Main.vue';
 //     meta: {
 //         title: '登录 - 我的商务室 '
 //     },
-//     component: () => import('@/views/navPage.vue')
-//     // component: () => import('@/views/home/homepage.vue')
+//     component: resolve => require('@/views/navPage.vue')
+//     // component: resolve => require('@/views/home/homepage.vue')
 // };
 
 export const indexRouter = {
@@ -17,7 +17,8 @@ export const indexRouter = {
     meta: {
         title: '登录 - 我的商务室 '
     },
-    component: () => import('@/views/index.vue')
+    // component: resolve => require('@/views/index.vue')
+    component: resolve => require(['@/views/index.vue'],resolve)
 };
 
 export const page403 = {
@@ -26,7 +27,7 @@ export const page403 = {
         title: '403-权限不足'
     },
     name: 'error-403',
-    component: () => import('@/views/error-page/403.vue')
+    component: resolve => require(['@/views/error-page/403.vue'],resolve)
 };
 
 export const page500 = {
@@ -35,13 +36,13 @@ export const page500 = {
         title: '500-服务端错误'
     },
     name: 'error-500',
-    component: () => import('@/views/error-page/500.vue')
+    component: resolve => require(['@/views/error-page/500.vue'],resolve)
 };
 
 export const locking = {
     path: '/locking',
     name: 'locking',
-    component: () => import('@/views/main-components/lockscreen/components/locking-page.vue')
+    component: resolve => require(['@/views/main-components/lockscreen/components/locking-page.vue'],resolve)
 };
 
 // 作为Main组件的子页面展示但是不在左侧菜单显示的路由写在otherRouter里
@@ -51,56 +52,56 @@ export const otherRouter = {
     redirect: '/home',
     component: Main,
     children: [
-        { path: 'home', title: { i18n: 'home' }, name: 'home_index', component: () => import('@/views/home/home.vue') },
-        { path: 'ownspace', title: '个人中心', name: 'ownspace_index', component: () => import('@/views/own-space/own-space.vue') },
-        { path: 'download', title: '投标工具下载', name: 'download', component: () => import('@/views/collect/download.vue') },
-        { path: '/project-info', title: '项目详情', name: 'projectInfo', component: () => import('@/views/projectManage/info.vue') },
-        { path: 'project-create', title: '项目详情', name: 'projectCreate', component: () => import('@/views/projectManage/create.vue') },
-        { path: 'change-pass', title: '密码管理', name: 'change_pass', component: () => import('@/views/change-pass/change-pass.vue') },
-        { path: 'message', title: '消息中心', name: 'message_index', component: () => import('@/views/my-message/message.vue') },
+        { path: 'home', title: { i18n: 'home' }, name: 'home_index', component: resolve => require(['@/views/home/home.vue'],resolve) },
+        { path: 'ownspace', title: '个人中心', name: 'ownspace_index', component: resolve => require(['@/views/own-space/own-space.vue'], resolve) },
+        { path: 'download', title: '投标工具下载', name: 'download', component: resolve => require(['@/views/collect/download.vue'], resolve) },
+        { path: '/project-info', title: '项目详情', name: 'projectInfo', component: resolve => require(['@/views/projectManage/info.vue'], resolve) },
+        { path: 'project-create', title: '项目详情', name: 'projectCreate', component: resolve => require(['@/views/projectManage/create.vue'], resolve) },
+        { path: 'change-pass', title: '密码管理', name: 'change_pass', component: resolve => require(['@/views/change-pass/change-pass.vue'], resolve) },
+        { path: 'message', title: '消息中心', name: 'message_index', component: resolve => require(['@/views/my-message/message.vue'], resolve) },
 
-        { path: '/infoPublish/stateList', title: '所有公告', name: 'stateList', component: () => import('@/views/infoPublish/infoHome/stateList.vue') },
-        { path: '/project/addProject', title: '新建项目', name: 'addProject', component: () => import('@/views/infoPublish/project/addProject.vue') },
-        { path: '/project/editProject', title: '编辑项目', name: 'editProject', component: () => import('@/views/infoPublish/project/editProject.vue') },
-        { path: '/project/projectDetail', title: '项目详情', name: 'projectDetail', component: () => import('@/views/infoPublish/project/projectDetail.vue') },
+        { path: '/infoPublish/stateList', title: '所有公告', name: 'stateList', component: resolve => require(['@/views/infoPublish/infoHome/stateList.vue'], resolve) },
+        { path: '/project/addProject', title: '新建项目', name: 'addProject', component: resolve => require(['@/views/infoPublish/project/addProject.vue'], resolve) },
+        { path: '/project/editProject', title: '编辑项目', name: 'editProject', component: resolve => require(['@/views/infoPublish/project/editProject.vue'], resolve) },
+        { path: '/project/projectDetail', title: '项目详情', name: 'projectDetail', component: resolve => require(['@/views/infoPublish/project/projectDetail.vue'], resolve) },
 
-        { path: '/tender/tenderDetail', title: '招标公告详情', name: 'tenderDetail', component: () => import('@/views/infoPublish/tender/tenderDetail.vue') },
-        { path: '/tender/addTender', title: '新建招标公告', name: 'addTender', component: () => import('@/views/infoPublish/tender/addTender.vue') },
-        { path: '/tender/editTender', title: '编辑招标公告', name: 'editTender', component: () => import('@/views/infoPublish/tender/editTender.vue') },
-        { path: '/tender/correctTenderStep', title: '变更招标公告', name: 'correctTenderStep', component: () => import('@/views/infoPublish/tender/correctTenderStep.vue') },
-        { path: '/tender/abandonTender', title: '新建废标公告', name: 'abandonTender', component: () => import('@/views/infoPublish/tender/abandonTender.vue') },
-        { path: '/tender/editCorrectTender', title: '编辑变更招标公告', name: 'editCorrectTender', component: () => import('@/views/infoPublish/tender/editCorrectTender.vue') },
-        { path: '/tender/editAbandonTender', title: '编辑废标招标公告', name: 'editAbandonTender', component: () => import('@/views/infoPublish/tender/editAbandonTender.vue') },
+        { path: '/tender/tenderDetail', title: '招标公告详情', name: 'tenderDetail', component: resolve => require(['@/views/infoPublish/tender/tenderDetail.vue'], resolve) },
+        { path: '/tender/addTender', title: '新建招标公告', name: 'addTender', component: resolve => require(['@/views/infoPublish/tender/addTender.vue'], resolve) },
+        { path: '/tender/editTender', title: '编辑招标公告', name: 'editTender', component: resolve => require(['@/views/infoPublish/tender/editTender.vue'], resolve) },
+        { path: '/tender/correctTenderStep', title: '变更招标公告', name: 'correctTenderStep', component: resolve => require(['@/views/infoPublish/tender/correctTenderStep.vue'], resolve) },
+        { path: '/tender/abandonTender', title: '新建废标公告', name: 'abandonTender', component: resolve => require(['@/views/infoPublish/tender/abandonTender.vue'], resolve) },
+        { path: '/tender/editCorrectTender', title: '编辑变更招标公告', name: 'editCorrectTender', component: resolve => require(['@/views/infoPublish/tender/editCorrectTender.vue'], resolve) },
+        { path: '/tender/editAbandonTender', title: '编辑废标招标公告', name: 'editAbandonTender', component: resolve => require(['@/views/infoPublish/tender/editAbandonTender.vue'], resolve) },
 
-        { path: '/candidate/candidateDetail', title: '中标候选人公示详情', name: 'candidateDetail', component: () => import('@/views/infoPublish/candidate/candidateDetail.vue') },
-        { path: '/candidate/addCandidate', title: '新建中标候选人公示', name: 'addCandidate', component: () => import('@/views/infoPublish/candidate/addCandidate.vue') },
-        { path: '/candidate/editCandidate', title: '编辑中标候选人公示', name: 'editCandidate', component: () => import('@/views/infoPublish/candidate/editCandidate.vue') },
-        { path: '/candidate/correctCandidate', title: '变更中标候选人公示', name: 'correctCandidate', component: () => import('@/views/infoPublish/candidate/correctCandidate.vue') },
-        { path: '/candidate/abandonCandidate', title: '新建废标候选人公示', name: 'abandonCandidate', component: () => import('@/views/infoPublish/candidate/abandonCandidate.vue') },
-        {path: '/candidate/editCorrect', title: '编辑变更中标候选人公示', name: 'editCorrectCan', component: () => import('@/views/infoPublish/candidate/correctEdit.vue')},
-        {path: '/candidate/editAbandon', title: '编辑废标中标候选人公示', name: 'editAbandonCan', component: () => import('@/views/infoPublish/candidate/abandonEdit.vue')},
+        { path: '/candidate/candidateDetail', title: '中标候选人公示详情', name: 'candidateDetail', component: resolve => require(['@/views/infoPublish/candidate/candidateDetail.vue'], resolve) },
+        { path: '/candidate/addCandidate', title: '新建中标候选人公示', name: 'addCandidate', component: resolve => require(['@/views/infoPublish/candidate/addCandidate.vue'], resolve) },
+        { path: '/candidate/editCandidate', title: '编辑中标候选人公示', name: 'editCandidate', component: resolve => require(['@/views/infoPublish/candidate/editCandidate.vue'], resolve) },
+        { path: '/candidate/correctCandidate', title: '变更中标候选人公示', name: 'correctCandidate', component: resolve => require(['@/views/infoPublish/candidate/correctCandidate.vue'], resolve) },
+        { path: '/candidate/abandonCandidate', title: '新建废标候选人公示', name: 'abandonCandidate', component: resolve => require(['@/views/infoPublish/candidate/abandonCandidate.vue'], resolve) },
+        {path: '/candidate/editCorrect', title: '编辑变更中标候选人公示', name: 'editCorrectCan', component: resolve => require(['@/views/infoPublish/candidate/correctEdit.vue'], resolve)},
+        {path: '/candidate/editAbandon', title: '编辑废标中标候选人公示', name: 'editAbandonCan', component: resolve => require(['@/views/infoPublish/candidate/abandonEdit.vue'], resolve)},
 
-        { path: '/result/resultDetail', title: '中标结果公告详情', name: 'resultDetail', component: () => import('@/views/infoPublish/result/resultDetail.vue') },
-        { path: '/result/addResult', title: '新建中标结果公告', name: 'addResult', component: () => import('@/views/infoPublish/result/addResult.vue') },
-        { path: '/result/editResult', title: '编辑中标结果公告', name: 'editResult', component: () => import('@/views/infoPublish/result/editResult.vue') },
-        { path: '/result/correctResult', title: '新建变更中标结果公告', name: 'correctResult', component: () => import('@/views/infoPublish/result/correctResult.vue') },
-        { path: '/result/abandonResult', title: '新建废标中标结果公告', name: 'abandonResult', component: () => import('@/views/infoPublish/result/abandonResult.vue') },
-        { path: '/result/editCorrectResult', title: '编辑变更中标结果公告', name: 'editCorrectResult', component: () => import('@/views/infoPublish/result/editCorrectResult.vue') },
-        { path: '/result/editAbandonResult', title: '编辑废标中标结果公告', name: 'editAbandonResult', component: () => import('@/views/infoPublish/result/editAbandonResult.vue') },
+        { path: '/result/resultDetail', title: '中标结果公告详情', name: 'resultDetail', component: resolve => require(['@/views/infoPublish/result/resultDetail.vue'], resolve) },
+        { path: '/result/addResult', title: '新建中标结果公告', name: 'addResult', component: resolve => require(['@/views/infoPublish/result/addResult.vue'], resolve) },
+        { path: '/result/editResult', title: '编辑中标结果公告', name: 'editResult', component: resolve => require(['@/views/infoPublish/result/editResult.vue'], resolve) },
+        { path: '/result/correctResult', title: '新建变更中标结果公告', name: 'correctResult', component: resolve => require(['@/views/infoPublish/result/correctResult.vue'], resolve) },
+        { path: '/result/abandonResult', title: '新建废标中标结果公告', name: 'abandonResult', component: resolve => require(['@/views/infoPublish/result/abandonResult.vue'], resolve) },
+        { path: '/result/editCorrectResult', title: '编辑变更中标结果公告', name: 'editCorrectResult', component: resolve => require(['@/views/infoPublish/result/editCorrectResult.vue'], resolve) },
+        { path: '/result/editAbandonResult', title: '编辑废标中标结果公告', name: 'editAbandonResult', component: resolve => require(['@/views/infoPublish/result/editAbandonResult.vue'], resolve) },
 
-        { path: '/prequalification/prequalificationDetail', title: '资格预审公告详情', name: 'prequalificationDetail', component: () => import('@/views/infoPublish/prequalification/prequalificationDetail.vue') },
-        { path: '/prequalification/prequalificationCorrect', title: '变更资格预审公告', name: 'correctPre', component: () => import('@/views/infoPublish/prequalification/prequalificationCorrect.vue') },
-        { path: '/prequalification/abandonPrequalification', title: '新建废标资格预审公告', name: 'abandonPre', component: () => import('@/views/infoPublish/prequalification/abandonPrequalification.vue') },
-        { path: '/prequalification/addPrequalification', title: '新建资格预审公告', name: 'addPrequalification', component: () => import('@/views/infoPublish/prequalification/addPrequalification.vue') },
-        { path: '/prequalification/editPrequalification', title: '编辑资格预审公告', name: 'editPrequalification', component: () => import('@/views/infoPublish/prequalification/editPrequalification.vue') },
-        { path: '/prequalification/editCorrectPre', title: '编辑变更资格预审公告', name: 'editCorrectPre', component: () => import('@/views/infoPublish/prequalification/editCorrectPre.vue') },
-        { path: '/prequalification/editAbandonPre', title: '编辑废标资格预审公告', name: 'editAbandonPre', component: () => import('@/views/infoPublish/prequalification/editAbandonPre.vue') },
+        { path: '/prequalification/prequalificationDetail', title: '资格预审公告详情', name: 'prequalificationDetail', component: resolve => require(['@/views/infoPublish/prequalification/prequalificationDetail.vue'], resolve) },
+        { path: '/prequalification/prequalificationCorrect', title: '变更资格预审公告', name: 'correctPre', component: resolve => require(['@/views/infoPublish/prequalification/prequalificationCorrect.vue'],resolve) },
+        { path: '/prequalification/abandonPrequalification', title: '新建废标资格预审公告', name: 'abandonPre', component: resolve => require(['@/views/infoPublish/prequalification/abandonPrequalification.vue'], resolve) },
+        { path: '/prequalification/addPrequalification', title: '新建资格预审公告', name: 'addPrequalification', component: resolve => require(['@/views/infoPublish/prequalification/addPrequalification.vue'], resolve) },
+        { path: '/prequalification/editPrequalification', title: '编辑资格预审公告', name: 'editPrequalification', component: resolve => require(['@/views/infoPublish/prequalification/editPrequalification.vue'], resolve) },
+        { path: '/prequalification/editCorrectPre', title: '编辑变更资格预审公告', name: 'editCorrectPre', component: resolve => require(['@/views/infoPublish/prequalification/editCorrectPre.vue'], resolve) },
+        { path: '/prequalification/editAbandonPre', title: '编辑废标资格预审公告', name: 'editAbandonPre', component: resolve => require(['@/views/infoPublish/prequalification/editAbandonPre.vue'], resolve) },
 
-        { path: '/bidder/bidderDetail', title: '投标人详情', name: 'bidderDetail', component: () => import('@/views/infoPublish/bidder/bidderDetail.vue') },
+        { path: '/bidder/bidderDetail', title: '投标人详情', name: 'bidderDetail', component: resolve => require(['@/views/infoPublish/bidder/bidderDetail.vue'], resolve) },
 
 
-        { path: '/infoPublish/noticeDetail', title: '公告详情', name: 'noticeDetail', component: () => import('@/views/infoPublish/tenderDetail/detail.vue') },
-        { path: '/infoPublishOut/autoDetail', title: '自主招标类项目详情', name: 'autoDetail', component: () => import('@/views/infoPublishOut/autoDetail.vue') },
+        { path: '/infoPublish/noticeDetail', title: '公告详情', name: 'noticeDetail', component: resolve => require(['@/views/infoPublish/tenderDetail/detail.vue'], resolve) },
+        { path: '/infoPublishOut/autoDetail', title: '自主招标类项目详情', name: 'autoDetail', component: resolve => require(['@/views/infoPublishOut/autoDetail.vue'], resolve) },
 
     ]
 };
