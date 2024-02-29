@@ -3,7 +3,7 @@ import {
     baseURL
 } from '@/api/baseURL'
 
-// axios.defaults.baseURL = baseURL;
+axios.defaults.baseURL = baseURL;
 const CancelToken = axios.CancelToken;
 
 import {
@@ -22,7 +22,7 @@ import {
 } from 'view-design';
 import Cookies from 'js-cookie';
 // 统一请求路径前缀
-let base = baseURL;
+let base = '/studio';
 // 超时设定
 axios.defaults.timeout = 15000;
 axios.interceptors.request.use(config => {

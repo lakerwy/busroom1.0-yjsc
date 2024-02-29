@@ -157,17 +157,17 @@
           </Card>
         </Col>
         <Col span="8">
-          <Card :bordered="false" class="kuaijie">
-            <div class="_clear" slot="title">
-              <span class="title">快捷操作</span>
-            </div>
-            <div class="card_body member">
-              <div class="manager">
-                <a v-for="(item, i) in linkList" @click="linkTo(item)"
-                   :key="i">{{ item.title }}</a>
-              </div>
-            </div>
-          </Card>
+<!--          <Card :bordered="false" class="kuaijie">-->
+<!--            <div class="_clear" slot="title">-->
+<!--              <span class="title">快捷操作</span>-->
+<!--            </div>-->
+<!--            <div class="card_body member">-->
+<!--              <div class="manager">-->
+<!--                <a v-for="(item, i) in linkList" @click="linkTo(item)"-->
+<!--                   :key="i">{{ item.title }}</a>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </Card>-->
           <Card :bordered="false" class="kuaijie chengyuan">
             <div class="_clear" slot="title">
               <span class="title">现有成员（{{ allList.length }}）</span>
@@ -1234,29 +1234,31 @@ export default {
     height: 49vh;
   }
 }
-.kuaijie:hover{
-  box-shadow: none;
-}
-.kuaijie {
-  border-radius: 4px 4px 0 0px;
-  /deep/ .ivu-card-body {
-    padding-bottom: 8px;
-    padding-top: 8px;
-  }
-  .member {
-    height: 56px;
-  }
-  .member > div a, .member > div span {
-    height: 27px;
-    cursor: pointer;
-  }
-}
-.chengyuan {
-  border-radius: 0px 0px 4px 4px;
-  /deep/ .ivu-card-head {
-    padding-top: 0;
-  }
-}
+
+
+//.kuaijie:hover{
+//  box-shadow: none;
+//}
+//.kuaijie {
+//  border-radius: 4px 4px 0 0px;
+//  /deep/ .ivu-card-body {
+//    padding-bottom: 8px;
+//    padding-top: 8px;
+//  }
+//  .member {
+//    height: 56px;
+//  }
+//  .member > div a, .member > div span {
+//    height: 27px;
+//    cursor: pointer;
+//  }
+//}
+//.chengyuan {
+//  border-radius: 0px 0px 4px 4px;
+//  /deep/ .ivu-card-head {
+//    padding-top: 0;
+//  }
+//}
 
 
 </style>

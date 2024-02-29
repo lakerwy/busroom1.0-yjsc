@@ -4,13 +4,13 @@ import {baseURL} from '@/api/baseURL'
 
 
 // 导出模型
-export const exportModel =  baseURL + "/actModel/export/"
+export const exportModel =  baseURL + "/studio/actModel/export/"
 // 通过文件部署模型流程
-export const deployByFile = baseURL + "/actModel/deployByFile"
+export const deployByFile = baseURL + "/studio/actModel/deployByFile"
 // 导出流程资源
-export const exportResource = baseURL + "/actProcess/export"
+export const exportResource = baseURL + "/studio/actProcess/export"
 // 获取高亮实时流程图
-export const getHighlightImg = baseURL + "/actProcess/getHighlightImg/"
+export const getHighlightImg = baseURL + "/studio/actProcess/getHighlightImg/"
 
 
 
