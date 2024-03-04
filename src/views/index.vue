@@ -386,7 +386,6 @@ export default {
           var objQuery = this.getQuery()
           queryStr = objQuery.query? objQuery.query : '';
           queryType = objQuery.type? objQuery.type : '';
-
           // queryStr = hrefStr.split("&")[1].split("=")[1];
           // queryType = hrefStr.split("&")[2] ? hrefStr.split("&")[2].split("=")[1] : '';
         }

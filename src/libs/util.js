@@ -362,13 +362,22 @@ util.initRouter = function (vm, s, t) {
                             name: 'subscribe-email'
                         })
                     }
+                } else if(s == "change_pass"){
+                    vm.$router.push({
+                        name: 'change_pass',
+                        params: {
+                            type: "edit"
+                        },
+                    },)
                 } else {
                     vm.$router.push({
                         name: s
                     })
                 }
             }
-        });
+        }).catch(error=>{
+            console.log(error)
+        })
     } else {
         // 读取缓存数据
         let data = window.localStorage.getItem('menuData');

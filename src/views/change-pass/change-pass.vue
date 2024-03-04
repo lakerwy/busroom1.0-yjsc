@@ -202,7 +202,6 @@ export default {
     if (paramsType == "edit") {
         this.tabValue = 'name2'
     }
-    this.init();
   },
 };
 </script>
