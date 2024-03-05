@@ -727,8 +727,6 @@ export default {
 
     },
     init() {
-
-
       let aprilTipFlag = true;
       let v = JSON.parse(window.localStorage.getItem('userInfo'));
       // 转换null为""

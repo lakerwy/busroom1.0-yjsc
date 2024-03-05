@@ -98,7 +98,6 @@
 </template>
 
 <script>
-import homepage from "./home/homepage";
 import navMenu from "./main-components/navMenu/nav-menu.vue";
 import tagsPageOpened from "./main-components/tags-page-opened.vue";
 import breadcrumbNav from "./main-components/breadcrumb-nav.vue";
@@ -122,7 +121,6 @@ var Stomp = stompOld.Stomp;
 var client;
 export default {
   components: {
-    homepage,
     navMenu,
     tagsPageOpened,
     breadcrumbNav,

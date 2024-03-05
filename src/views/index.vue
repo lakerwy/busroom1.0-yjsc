@@ -374,6 +374,7 @@ export default {
           Cookies.set("popFlag", 1, {
             expires: endDate,
           });
+          localStorage.setItem("popFlag", 1)
         }
       });
 
